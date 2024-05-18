@@ -1,0 +1,526 @@
+/* Container for the entire drone control interface */
+.drone-control-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 0;
+    /* Add more styling as needed */
+  
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+      /* Adjust styles for smaller screens */
+      /* For example, stack the status panel below the map view */
+      flex-direction: column-reverse;
+    }
+  }
+  /* Map view area */
+.map-view {
+    width: 100%;
+    height: 100vh;
+    background-color: #f0f0f0; /* Placeholder color for the map */
+    /* Add more styling as needed */
+  }
+
+  .connect-button {
+    position: absolute;
+    top: 5px;
+    right:1%; /* Adjust as needed */
+    width: 10%; /* Adjust as needed */
+    height: 8%; /* Adjust as needed */
+    z-index: 1000;
+    border: none;
+    border-radius: 5px;
+    padding: 1vh 2vw; /* Adjust padding as needed */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: green;
+    color: white;
+  }
+  
+  .connect-button.disconnect {
+    background-color: red; /* Background color for 'disconnect' status */
+  }
+  
+  .connect-button.connect:active {
+    animation: connectedPulse 2s;
+    box-shadow: 0 0 0 6em rgba(0, 128, 0, 0.4); /* Change pulse color to orange */
+  }
+
+  .connect-button.disconnect:active {
+    animation: disconnectedPulse 2s;
+    box-shadow: 0 0 0 6em rgba(255, 0, 0, 0.4); /* Change pulse color to orange */
+  }
+  
+  @keyframes connectedPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 128, 0, 0.4); /* Change pulse color to orange */
+    }
+  }
+
+  @keyframes disconnectedPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); /* Change pulse color to orange */
+    }
+  }
+
+  .arm-button {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    width: 200px;
+    height: 7.5vh;
+    z-index: 1000;
+    border: none;
+    border-radius: 5px;
+    padding: 1vh 2vw; /* Adjust padding as needed */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .status-armed {
+    background-color: red; /* Background color for 'disarmed' status */
+    color: white; /* Text color for 'disarmed' status */
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    width: 200px;
+    height: 7.5vh;
+    z-index: 1000;
+    border: none;
+    border-radius: 5px;
+    padding: 1vh 2vw; /* Adjust padding as needed */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .status-disarmed {
+    background-color: green; /* Background color for 'armed' status */
+    color: white; /* Text color for 'armed' status */
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    width: 200px;
+    height: 7.5vh;
+    z-index: 1000;
+    border: none;
+    border-radius: 5px;
+    padding: 1vh 2vw; /* Adjust padding as needed */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .status-disarmed:active {
+    animation: armedPulse 2s;
+    box-shadow: 0 0 0 6em rgba(0, 128, 0, 0.4); /* Pulse color for 'armed' status */
+  }
+  
+  .status-armed:active {
+    animation: disarmedPulse 2s;
+    box-shadow: 0 0 0 6em rgba(255, 0, 0, 0.4); /* Pulse color for 'disarmed' status */
+  }
+  
+  @keyframes armedPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 128, 0, 0.4); /* Pulse color animation for 'armed' */
+    }
+  }
+  
+  @keyframes disarmedPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); /* Pulse color animation for 'disarmed' */
+    }
+  }
+  
+  
+  .plan-button {
+    position: absolute;
+    bottom: 30px;
+    right: 500px;
+    width: 200px;
+    height: 7.5vh;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
+    box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
+    z-index: 1000;
+    transition: background 1.5s ease; /* Apply transition to background */
+  }
+  
+  .plan-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .plan-button:active {
+    background-size: 300% 100%; /* Enlarge the background horizontally */
+    background-position: right; /* Shift the gradient to the right */
+    transition: background-size 0.4s ease, background-position 0.4s ease; /* Modify transition properties on click */
+  }
+  
+  .plan-button:focus {
+    outline: none;
+  }
+  
+  .clear-path-button {
+    position: absolute;
+    bottom: 30px;
+    right: 250px;
+    width: 200px;
+    height: 55px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background-image: linear-gradient(to right, #f5ce62, #e85a19,  #e43603);
+    box-shadow: 0 4px 15px 0 rgba(229, 66, 10, 0.75);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
+    z-index: 1000;
+    transition: background 0.4s ease; /* Apply transition to background */
+  }
+  
+  .clear-path-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .clear-path-button:active {
+    background-size: 300% 100%; /* Enlarge the background horizontally */
+    background-position: right; /* Shift the gradient to the right */
+    transition: background-size 0.4s ease, background-position 0.4s ease; /* Modify transition properties on click */
+  }
+  
+  .clear-path-button:focus {
+    outline: none;
+  }
+
+  /* Status panel */
+.status-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Add more styling as needed */
+  }
+  
+  .status-item {
+    font-size: 14px;
+    /* Add more styling as needed */
+  }
+  
+  /* Control buttons */
+  .control-buttons {
+    display: flex;
+    gap: 10px;
+    /* Add more styling as needed */
+  }
+  
+  .Divtop{
+    position: absolute;
+    top:-1%;
+    left:4%;
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    height: 12vh;
+    /* padding: 0.2%; */
+    padding-top: 0.7%;
+    justify-content: center;
+    /* background-color:brown; */
+    z-index: 9999;
+  }
+
+  .Divcol{
+    /* position: relative; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    /* background-color: yellow; */
+}
+  
+.Divrow{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* align-items: center; */
+    /* background-color: rgb(0, 255, 4); */
+}
+  
+.Grbox{
+    padding: 0.5%;
+    /* margin: 0.5%; */
+    /* position: absolute; */
+    /* margin-top: 0.5%; */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    /* background: linear-gradient(180deg, #1B1141 0%, #2E4E7E 100%); */
+    border: 0.722913px solid #000000;
+    background-color: #00000064;
+    box-shadow: 3.61456px 3.61456px 4.33748px 0.722913px rgba(0, 0, 0, 0.25);
+    border-radius: 21px;
+}
+  
+
+  
+.Container{
+    position: absolute;
+    /* position: relative; */
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    /* padding: 5%; */
+    /* background-color: blueviolet; */
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+  
+.Colgrp{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: #000000; */
+}
+  
+.Rowgrp{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #000000; */
+}
+
+.Rowgrpsig{
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  align-items: end;
+  justify-content: space-around;
+  /* background-color: rgb(0, 255, 0); */
+  /* background-color: #000000; */
+}
+
+  
+.Texttop{
+    color: white;
+    font-size: 0.9vw;
+    /* font-family: "B612", sans-serif; */
+    /* font-size: clamp(2px,10px,20px); */
+    /* margin: 0.5%; */
+}
+
+.Textbox{
+  /* padding: 1%; */
+  padding-left: 1.8%;
+  /* margin-left: 10px; */
+  margin: 7px;
+  width:3.5vw;
+  height:2.8vh;
+  background-color: white;
+  font-family: 'Istok Web';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.05vw;
+  /* line-height: 21px; */
+  display: flex;
+  /* justify-content: flex-start; */
+  justify-content: center;
+  align-items: center;
+  color: #000000;
+  /* overflow: hidden; */
+}
+
+.Data{
+  background-color: black;
+  font-weight: 700;
+  font-size: 1.2vw;
+}
+
+.Measures{
+  font-family: "B612", sans-serif;
+  color: white;
+  font-size: 0.6vw;
+}
+
+
+
+.heading {
+  height: 7vh;
+  width: 35%;
+  /* background: #525252; */
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  border-radius: 10px;
+  background: white;
+}
+
+.heading-arrow {
+  height: 40%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ri-triangle-fill {
+  /* font-size: 30px;
+  color: #ff0000; */
+  transform: scaleY(-1);
+}
+
+.values {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.val {
+  font-weight: bold;
+  font-family: "Inter", sans-serif;
+  font-size: 1.2vw;
+  /* height: 3em; */
+  /* width: 3em; */
+  display: flex;
+  justify-content: center;
+  /* color: #5cef59; */
+  color: #001861;
+  z-index: 1000;
+}
+
+.triangle-down {
+width: 0;
+height: 0;
+border-left: 0.8vw solid transparent;
+border-right: 0.8vw solid transparent;
+border-top: 1vw solid #ff0000;
+}
+
+
+.battery-group{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    /* align-items: end; */
+    align-items: center;
+    top:17%;
+    left:93%;
+    height:70%;
+    width:8%;
+    /* background-color: rgb(229, 255, 0); */
+    /* border: 1px solid #000000; */
+    /* box-shadow: inset 5px 5px 6px 1px rgba(0, 0, 0, 0.25); */
+    /* border-radius: 8px; */
+}
+
+.battery{
+    display: flex;
+    flex-direction: column;
+    /* padding: 2%; */
+    justify-content: center;
+    align-items: center;
+    /* position: absolute; */
+    /* top:10%; */
+    /* left:0%; */
+    height:87%;
+    width:25%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #000000;
+    box-shadow: inset 5px 5px 6px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+}
+
+.battery-top{
+    display: flex;
+    /* position: absolute; */
+    /* top:60%; */
+    /* left:10%; */
+    height:3%;
+    width:5%;
+    background-color: rgb(255, 255, 255);
+    border: 0.2px solid #000000;
+    /* box-shadow: inset 5px 5px 6px 1px rgba(0, 0, 0, 0.25); */
+    border-radius: 0.5px;
+}
+
+.battery-inline{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    /* margin-top: 1px; */
+    /* position: absolute; */
+    /* top:10%; */
+    /* left:0%; */
+    height:90%;
+    width:80%;
+    background-color: rgb(255, 255, 255);
+    /* border: 1px solid #000000; */
+    border: 0.5px solid #000000;
+    box-shadow: inset 3px 3px 6px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.battery-level{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 70%; */
+    width:100%;
+    background-color: rgb(30, 255, 0);
+    box-shadow: inset 1px 0.1px 6px 1px rgba(0, 0, 0, 0.25);
+    transition: height 0.3s ease;
+}
+
+
+/* Container styling */
+.flight-mode-container {
+  position: absolute;
+  top:1%;
+  left:74%;
+  height: 8%;
+  width: 13%;
+  font-size: 2.3vh;
+  display: inline-block;
+  border: 2px solid white; /* Blue border */
+  padding: 3px;
+  background-color: #007bff ;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  z-index: 1111;
+}
+
+/* Text styling */
+.flight-mode-container p {
+  margin: 0;
+  font-weight: bold;
+  color: white; /* Blue color */
+}
+
+/* Dropdown styling */
+.dropdown select {
+  width: 99%;
+  padding: 8px;
+  font-size: 2vh;
+  border: 1px solid #007bff; /* Blue border */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Hover effect on dropdown */
+.dropdown select:hover {
+  border-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Focus effect on dropdown */
+.dropdown select:focus {
+  border-color: #0056b3; /* Darker blue on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Light blue shadow on focus */
+}
