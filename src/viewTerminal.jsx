@@ -8,8 +8,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./view.css";
 
-import locIcon from "./images/locationIcon.png";
-import planeLoc from "./images/plane.png";
+import locIcon from "./images/loc.png";
+import planeLoc from "./images/copter.png";
 
 const MissionPlannerMap = () => {
     const mapRef = useRef(null);
@@ -38,6 +38,9 @@ const MissionPlannerMap = () => {
     const [selectedMode, setSelectedMode] = useState(null);
     const [armStatus, setArmStatus] = useState(false);
     const [websocket, setWebsocket] = useState(null);
+
+    const [emergencyClicked, setEmergencyClicked] = useState(false);
+    const emergencyMarkerRef = useRef(null);
   
     useEffect(() => {
       const fetchData = async () => {
@@ -81,24 +84,39 @@ const MissionPlannerMap = () => {
       popupAnchor: [0, -30],
     });
     var planeIcon = L.icon({
-      iconUrl: planeLoc,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+      iconUrl: planeLoc, 
+      iconSize: [112, 63],
+      iconAnchor: [56, 31],
       popupAnchor: [0, -30],
       rotationAngle: 0,
       rotationOrigin: "50% 50%",
     });
-  
+
+    // Define custom DivIcon with animated circles
+    const customDivIcon = L.divIcon({
+      className: 'leaflet-custom-div-icon',
+      html: `<div class="allCircle">
+          <div class="circle one"></div>
+          <div class="circle two"></div>
+          <div class="circle three"></div>
+          <div class="circle four"></div>
+          <div class="circle five"></div>
+        </div>
+      `,
+      iconSize: [100, 100],
+      iconAnchor: [50, 50],
+    });
   
     useEffect(() => {
       if (map) return; // Prevent multiple initializations
     
-      const leafletMap = L.map(mapRef.current).setView([latitude, longitude], 15);
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(leafletMap);
+      const leafletMap = L.map(mapRef.current).setView([latitude, longitude], 18);
+     
+
+       L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+}).addTo(leafletMap);
 
       // L.control.zoom({ position: 'bottomright' }).addTo(mapRef.current);
     
@@ -135,7 +153,7 @@ const MissionPlannerMap = () => {
         // If there are at least two markers, create the polyline and prepare waypoints
         if (markers.length >= 2) {
           const latlngs = markers.map(marker => marker.getLatLng());
-          const polyline = L.polyline(latlngs, { color: 'blue' }).addTo(leafletMap);
+          const polyline = L.polyline(latlngs, { color: 'white' }).addTo(leafletMap);
     
           // Optionally, you can bind a tooltip to the polyline showing the total distance
           const totalDistance = calculateTotalDistance(latlngs);
@@ -304,9 +322,44 @@ const MissionPlannerMap = () => {
       if (map && latitude !== undefined && longitude !== undefined) {
         vehicleRef.current = L.marker([latitude, longitude], {
           icon: planeIcon,
+          zIndexOffset:2000,
         }).addTo(map);
       }
     }, [latitude, longitude]);
+
+    useEffect(() => {
+      if(emergencyMarkerRef.current) return;
+
+      if(map && latitude !== undefined && longitude !==undefined){
+        emergencyMarkerRef.current = L.marker([latitude, longitude], {
+          icon: customDivIcon,
+          zIndexOffset: 1900,
+          }).addTo(map);
+      }
+    },[latitude, longitude]);
+
+    // useEffect(() => {
+    //   if (emergencyClicked) {
+    //     // Create emergency marker if emergencyClicked is true
+    //     console.log("function called");
+    //     if (!emergencyMarkerRef.current) {
+    //       emergencyMarkerRef.current = L.marker([latitude, longitude], {
+    //         icon: customDivIcon,
+    //         zIndexOffset: 1900,
+    //       }).addTo(map);
+    //     } else {
+    //       // Update emergency marker position
+    //       emergencyMarkerRef.current.setLatLng([latitude, longitude]);
+    //     }
+    //   } else {
+    //     // Remove emergency marker if emergencyClicked is false and marker exists
+    //     console.log("function called again");
+    //     if (emergencyMarkerRef.current) {
+    //       map.removeLayer(emergencyMarkerRef.current);
+    //       emergencyMarkerRef.current = null;
+    //     }
+    //   }
+    // },[emergencyClicked, latitude, longitude]);
   
     useEffect(() => {
       if (firstTime && latitude === 0 && longitude === 0) {
@@ -322,6 +375,17 @@ const MissionPlannerMap = () => {
         if (vehicleRef.current) {
           vehicleRef.current.setLatLng([latitude, longitude]);
           vehicleRef.current.setRotationOrigin("center center");
+        }
+
+        if(emergencyClicked){
+          if(emergencyMarkerRef.current){
+            emergencyMarkerRef.current.setLatLng([latitude, longitude]);
+          }
+        } else{
+          if (emergencyMarkerRef.current) {
+            map.removeLayer(emergencyMarkerRef.current);
+            emergencyMarkerRef.current = null;
+          }
         }
       }
     }, [map, latitude, longitude]);
@@ -346,6 +410,9 @@ const MissionPlannerMap = () => {
     degrees[270] = "W";
     degrees[315] = "NW";
 
+    const handleEmergency = ()=> {
+      setEmergencyClicked(!emergencyClicked);
+    }
 
     useEffect(() => {
       setA(degrees[(degree - 2 + 360) % 360]);
@@ -524,7 +591,7 @@ const MissionPlannerMap = () => {
             });
       
             // Add polyline to the map
-            const newPolyLine = L.polyline(polyPoints, { color: "blue" }).addTo(map);
+            const newPolyLine = L.polyline(polyPoints, { color: "white" }).addTo(map);
       
             // Update state with new markers and polyline
             setMarkers(newMarkers);
@@ -661,9 +728,9 @@ const MissionPlannerMap = () => {
                 </div>
             </div>
           <div className="control-buttons">
-          <button className={`connect-button ${status}`} onClick={handleConnectButtonClick}>
+          {/* <button className={`connect-button ${status}`} onClick={handleConnectButtonClick}>
               {status === 'connect' ? 'Connect' : 'Disconnect'}
-            </button>
+            </button> */}
             <div className="flight-mode-container">
             <p>Select a flight mode:</p>
             <div className="dropdown">
@@ -686,16 +753,26 @@ const MissionPlannerMap = () => {
           </div>
         </div>
 
-          <button className="plan-button" onClick={handlePlanButtonClick}>
-              Plan
-            </button>
-            <button className="clear-path-button" onClick={clearPath}>
-            Clear Path
-          </button>
-          <button className={armStatus ? "status-armed" : "status-disarmed"} onClick={handleArmButtonClick}>
+        {/* {
+            emergencyClicked && (
+              <div className="allCircle">
+                <div class="circle one"></div>
+                <div class="circle two"></div>
+                <div class="circle three"></div>
+              </div>
+            )
+          } */}
+       
+
+          <button className="emergency" onClick={handleEmergency}>Emergency Pit Stop</button>   
+          {/* <button className={armStatus ? "status-armed" : "status-disarmed"} onClick={handleArmButtonClick}>
             {armStatus ? 'DisArm' : 'Arm'}
-          </button>
+          </button> */}
+
+          
         </div>
+
+      
       );
     };
 export default MissionPlannerMap;

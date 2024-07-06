@@ -20,6 +20,7 @@
     height: 100vh;
     background-color: #f0f0f0; /* Placeholder color for the map */
     /* Add more styling as needed */
+    z-index: 999;
   }
 
   .connect-button {
@@ -523,4 +524,72 @@ border-top: 1vw solid #ff0000;
 .dropdown select:focus {
   border-color: #0056b3; /* Darker blue on focus */
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Light blue shadow on focus */
+}
+.emergency{
+  background-color: red; /* Background color for 'disarmed' status */
+  color: white; /* Text color for 'disarmed' status */
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  width: 250px;
+  height: 7.5vh;
+  z-index: 1000;
+  border: none;
+  font-weight:bold;
+  font-size: 18px;
+  border-radius: 15px;
+  padding: 1vh 2vw; /* Adjust padding as needed */
+  cursor: pointer;
+}
+
+@keyframes circle {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(8);
+    opacity: 0;
+  }
+}
+
+.allCircle {
+  width: 100px;
+  height: 100px;
+  z-index: 1000;
+  position: absolute;
+  top: calc(50% - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+/*   margin: 0 auto; */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.one {
+  animation: circle 6s 4s infinite linear;
+  background: rgb(232, 8, 41);
+}
+.two{
+  animation: circle 6s 3s infinite linear;
+  background: rgb(242, 33, 33);
+}
+.three {
+  animation: circle 6s 2s infinite linear;
+  background: rgb(245, 47, 47);
+}
+.four{
+  animation: circle 6s 1s infinite linear;
+  background: rgb(239, 96, 96);
+}
+.five {
+  animation: circle 6s 0s infinite linear;
+  background: rgb(232, 137, 120);
 }
